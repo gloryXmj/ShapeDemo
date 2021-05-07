@@ -9,6 +9,7 @@
 #include "Point.h"
 #include "pixshape.h"
 #include "FillControl.h"
+#include "cutline.h"
 
 int main(int argc, char *argv[])
 {
@@ -77,9 +78,12 @@ int main(int argc, char *argv[])
         //        fillControl.paint(1);
         //        fillControl.scanLine();
 
-
-
-
+        Cohen_Suther_land::CutLine cut;
+        cut.setRect(Mcoder::Rect(200,200,800,800));
+        Mcoder::Line line(100,100,2000,2000);
+        cut.addLine(&line);
+        std::cout<< cut.exeCutLine()<<std::endl;
+        //https://blog.csdn.net/chengxuyuanliwanwan/article/details/96866762
         std::cout << "本次绘制用时 : " << clock()- timeBegin << " ms"<<std::endl;
         Sleep(100);
     }

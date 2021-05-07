@@ -7,27 +7,24 @@ class Point
 {
 public:
     Point();
-    Point(int x, int y);
+    Point(const double x, const double y);
     Point(const Point& point);      // 拷贝构造函数
 
-    void setX(int x);
-    int getX();
-    void setY(int y);
-    int getY();
-    void set(int x, int y);
+    void setX(const double x);
+    double getX() const;
+    void setY(const double y);
+    double getY() const;
+    void set(const double x, const double y);
 
     void copy(const Point& point);
-    void print();       // 输出点的信息
+    void print() const;       // 输出点的信息
 
-// 重载运算符
-
+    // 重载运算符
     Point &operator =(const Point& point);      // 重载等于号
 
-
-
 private:
-    int x;   // 点的X坐标
-    int y;   // 点的Y坐标
+    double x;   // 点的X坐标
+    double y;   // 点的Y坐标
 };
 }
 

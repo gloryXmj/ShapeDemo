@@ -8,7 +8,7 @@ Point::Point()
     this->y = 0;
 }
 
-Point::Point(int x, int y)
+Point::Point(const double x, const double y)
 {
     this->x = (int)x;
     this->y = (int)y;
@@ -26,22 +26,22 @@ Point::Point(const Point &point)
     this->y = point.y;
 }
 
-void Point::setX(int x)
+void Point::setX(const double x)
 {
     this->x = x;
 }
 
-int Point::getX()
+double Point::getX() const
 {
     return this->x;
 }
 
-void Point::setY(int y)
+void Point::setY(const double y)
 {
     this->y = y;
 }
 
-int Point::getY()
+double Point::getY() const
 {
     return this->y;
 }
@@ -51,9 +51,9 @@ int Point::getY()
  * @brief  设置点
  * @param  int x
  * @param  int y
- * @date   2017/04/27
+ * @date   2021/04/27
  */
-void Point::set(int x, int y)
+void Point::set(const double x,const double y)
 {
     this->x = x;
     this->y = y;
@@ -72,7 +72,7 @@ void Point::copy(const Point &point)
  * @return void
  * @date   2017/04/27
  */
-void Point::print()
+void Point::print() const
 {
     std::cout<< "<" << this->x
              << "," << this->y <<">";
