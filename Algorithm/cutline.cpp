@@ -1,11 +1,7 @@
 ﻿#include "cutline.h"
-#include "pixshape.h"
-namespace Cohen_Suther_land{
+#include "pixshape.h""
 
-#define left 1
-#define right 2
-#define bottom 4
-#define top 8
+
 
 CutLine::CutLine()
 {
@@ -54,16 +50,35 @@ int CutLine::LinesNum() const
     return (int)this->lines.size();
 }
 
-bool CutLine::exeCutLine(int lineId)
+
+
+namespace Cohen_Suther_land{
+#define left 1
+#define right 2
+#define bottom 4
+#define top 8
+
+
+bool Cohen_Suther_CutLine::exeCutLine(int lineId)
 {
     if((int)lines.size() <= lineId||(int)lines.size()<=0)
         return false;
+
+    PixShape::Rect(Point(this->rect.xmin(),this->rect.ymin()),
+                   Point(this->rect.xmax(),this->rect.ymax()),Color(0,255,255));
+
+    PixShape::Line((*this->lines.begin())->getHeadPt().getX(),
+                   (*this->lines.begin())->getHeadPt().getY(),
+                   (*this->lines.begin())->getTailPt().getX(),
+                   (*this->lines.begin())->getTailPt().getY(),
+                   Color(255,0,0));
+
     if(lineId==-1)
     {
         iterator lineiter;
         for(lineiter = this->lines.begin();lineiter != this->lines.end();lineiter++)
         {
-               CS_CutLine(*lineiter);
+            CS_CutLine(*lineiter);
         }
     }
     else
@@ -74,17 +89,17 @@ bool CutLine::exeCutLine(int lineId)
 }
 
 //编码
-void CutLine::encode(double x,double y,int &code)
+void Cohen_Suther_CutLine::encode(double x,double y,int &code)
 {
     int c=0;
     if(x<this->rect.xmin())  {c=c+left;}
     else if(x>this->rect.xmax())  {c=c+right;}
-    if(y<this->rect.ymax())  {c=c+bottom;}
-    else if(y>this->rect.ymin())  {c=c+top;}
+    if(y<this->rect.ymin())  {c=c+bottom;}
+    else if(y>this->rect.ymax())  {c=c+top;}
     code=c;
 }
 
-int CutLine::CS_CutLine(const Line * line)
+int Cohen_Suther_CutLine::CS_CutLine(const Line * line)
 {
     double x1 = line->getHeadPt().getX(),
             y1 = line->getHeadPt().getY(),
@@ -104,9 +119,9 @@ int CutLine::CS_CutLine(const Line * line)
         else if((right&code)!=0)
         {x=this->rect.xmax();y=y1+(y2-y1)*(this->rect.xmax()-x1)/(x2-x1);}
         else if ((bottom&code) != 0)
-        {y=this->rect.ymax();x=x1+(x2-x1)*(this->rect.ymax()-y1)/(y2-y1);}
-        else if ((top&code) != 0)
         {y=this->rect.ymin();x=x1+(x2-x1)*(this->rect.ymin()-y1)/(y2-y1);}
+        else if ((top&code) != 0)
+        {y=this->rect.ymax();x=x1+(x2-x1)*(this->rect.ymax()-y1)/(y2-y1);}
         if(code==code1)
         {x1=x;y1=y;encode(x,y,code1);}
         else
@@ -114,6 +129,86 @@ int CutLine::CS_CutLine(const Line * line)
     }
     PixShape::Line(x1,y1,x2,y2,line->getColor());
     return 0;
+}
+}
+
+namespace Liang_Barsky {
+
+bool Liang_Barsky_CutLine::exeCutLine(int lineId)
+{
+    if((int)lines.size() <= lineId||(int)lines.size()<=0)
+        return false;
+
+    PixShape::Rect(Point(this->rect.xmin(),this->rect.ymin()),
+                   Point(this->rect.xmax(),this->rect.ymax()),Color(0,255,255));
+
+    PixShape::Line((*this->lines.begin())->getHeadPt().getX(),
+                   (*this->lines.begin())->getHeadPt().getY(),
+                   (*this->lines.begin())->getTailPt().getX(),
+                   (*this->lines.begin())->getTailPt().getY(),
+                   Color(255,0,0));
+
+    if(lineId==-1)
+    {
+        iterator lineiter;
+        for(lineiter = this->lines.begin();lineiter != this->lines.end();lineiter++)
+        {
+            LiangBarskyLineClip(*lineiter);
+        }
+    }
+    else
+    {
+        LiangBarskyLineClip(getLine(lineId));
+    }
+    return true;
+}
+
+
+bool Liang_Barsky_CutLine::ClipT(double q,double d,double &t0,double &t1)
+{//当线段完全不可见时，返回false，否则，返回true
+    double r;
+    if(q<0)
+    {
+        r=(double)d/(double)q;
+        if(r>t1)
+            return false;
+        else if(r>t0)
+        {t0=r;return true;}
+    }
+    else if(q>0)
+    {
+        r=(double)d/(double)q;
+        if(r<t0)
+            return false;
+        else if(r<t1)
+        {t1=r;return true;}
+    }
+    else if(d<0)
+        return false;
+    return true;
+}
+void Liang_Barsky_CutLine::LiangBarskyLineClip(const Line *line)
+{
+    double  x0 = line->getHeadPt().getX(),
+            y0 = line->getHeadPt().getY(),
+            x1 = line->getTailPt().getX(),
+            y1 = line->getTailPt().getY();
+
+    double delatx,delaty,t0,t1;
+    t0=0;t1=1;
+    delatx=x1-x0;
+    if(ClipT(-delatx,x0-this->rect.xmin(),t0,t1))
+        if(ClipT(delatx,this->rect.xmax()-x0,t0,t1))
+        {
+            delaty=y1-y0;
+            if(ClipT(-delaty,y0-this->rect.ymin(),t0,t1))
+                if(ClipT(delaty,this->rect.ymax()-y0,t0,t1))
+                {
+                    PixShape::Line((int)(x0+t0*delatx),(int)(y0+t0*delaty),
+                         (int)(x0+t1*delatx),(int)(y0+t1*delaty),line->getColor());
+                    return;
+                }
+        }
 }
 
 }

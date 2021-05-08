@@ -64,3 +64,20 @@ void Polygon::setColor(Color color)
     this->blue = color.blue();
 }
 
+bool Polygon::isColckWise() const
+{
+    double sum = 0.0;
+    for (int i = 0; i < (int)this->points.size(); i++) {
+        Point* v1 = points[i];
+        Point* v2 = points[(i + 1) % this->points.size()];
+        sum += (v2->getX() - v1->getX()) * (v2->getY() + v1->getY());
+    }
+    return sum > 0.0;
+}
+
+bool Polygon::isConvex() const
+{
+ ///FIXME
+ return false;
+}
+

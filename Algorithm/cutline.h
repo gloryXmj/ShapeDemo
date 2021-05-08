@@ -5,11 +5,12 @@
 #include "Line.h"
 #include "Rect.h"
 #include <vector>
-namespace Cohen_Suther_land {
+
 class CutLine
 {
     using Line = Mcoder::Line;
     using Rect = Mcoder::Rect;
+    using Point = Mcoder::Point;
 public:
     CutLine();
 
@@ -66,7 +67,28 @@ public:
      * \param lineId  为-1 表示裁剪所有直线
      * \return
      */
-    bool exeCutLine(int lineId = -1);
+    virtual bool exeCutLine(int lineId = -1) = 0 ;
+protected:
+
+    std::vector<Line*> lines;
+    Rect rect ;
+};
+
+
+namespace Cohen_Suther_land {
+class Cohen_Suther_CutLine : public CutLine
+{
+    using Line = Mcoder::Line;
+    using Rect = Mcoder::Rect;
+    using Point = Mcoder::Point;
+public:
+    Cohen_Suther_CutLine(){};
+    /*!
+     * \brief exeCutLine  执行裁剪动作
+     * \param lineId  为-1 表示裁剪所有直线
+     * \return
+     */
+    virtual bool exeCutLine(int lineId = -1) override;
 
 private:
     /*!
@@ -76,9 +98,26 @@ private:
      */
     int CS_CutLine(const Line *line);
     void encode(double x, double y, int &code);
+};
+}
+
+namespace Liang_Barsky {
+class Liang_Barsky_CutLine:public CutLine
+{
+    using Line = Mcoder::Line;
+    using Rect = Mcoder::Rect;
+    using Point = Mcoder::Point;
+public:
+    Liang_Barsky_CutLine(){};
+    /*!
+     * \brief exeCutLine  执行裁剪动作
+     * \param lineId  为-1 表示裁剪所有直线
+     * \return
+     */
+    virtual bool exeCutLine(int lineId = -1) override;
 private:
-    std::vector<Line*> lines;
-    Rect rect ;
+    bool ClipT(double q,double d,double &t0,double &t1);
+    void LiangBarskyLineClip(const Line *line);
 };
 }
 #endif // CUTLINE_H

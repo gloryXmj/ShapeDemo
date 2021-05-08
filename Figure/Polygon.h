@@ -59,6 +59,10 @@ public:
      * @date   2021/04/28
      */
     void setColor(Color color);       // 将QColor转换为rgb
+    /*!
+     * \brief getColor 获取多边形的颜色
+     * \return
+     */
     Color getColor(){return Color(red,green,blue);}
     double getRed(){return this->red;}
     void setRed(double red){this->red = red;}
@@ -66,6 +70,17 @@ public:
     void setGreen(double green){this->green = green;}
     double getBlue(){return this->blue;}
     void setBlue(double blue){this->blue = blue;}
+    /*!
+     * \brief isColckWise  是否为顺时针图形
+     * \return
+     */
+    bool isColckWise() const;
+
+    /*!
+     * \brief isConvex 是否为凸多边形
+     * \return
+     */
+    bool isConvex() const;
 
 private:
     vector<Point*> points;       // 点
