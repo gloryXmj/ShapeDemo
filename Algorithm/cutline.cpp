@@ -1,5 +1,7 @@
 ﻿#include "cutline.h"
 #include "pixshape.h"
+#include <iostream>
+
 namespace Cohen_Suther_land{
 
 #define left 1
@@ -56,12 +58,20 @@ int CutLine::LinesNum() const
 
 bool CutLine::exeCutLine(int lineId)
 {
+
     if((int)lines.size() <= lineId||(int)lines.size()<=0)
         return false;
+
+    PixShape::Rect(Mcoder::Point(this->rect.xmin(),this->rect.ymin()),Mcoder::Point(this->rect.xmax(),this->rect.ymax()),Color(0,255,0));
+    PixShape::Line((*this->lines.begin())->getHeadPt().getX(),
+                   (*this->lines.begin())->getHeadPt().getY(),
+                   (*this->lines.begin())->getTailPt().getX(),
+                   (*this->lines.begin())->getTailPt().getY(),
+                   Color(255,0,0));
+
     if(lineId==-1)
     {
-        iterator lineiter;
-        for(lineiter = this->lines.begin();lineiter != this->lines.end();lineiter++)
+        for(iterator lineiter = this->lines.begin();lineiter != this->lines.end();lineiter++)
         {
                CS_CutLine(*lineiter);
         }
@@ -77,40 +87,42 @@ bool CutLine::exeCutLine(int lineId)
 void CutLine::encode(double x,double y,int &code)
 {
     int c=0;
-    if(x<this->rect.xmin())  {c=c+left;}
-    else if(x>this->rect.xmax())  {c=c+right;}
-    if(y<this->rect.ymax())  {c=c+bottom;}
-    else if(y>this->rect.ymin())  {c=c+top;}
+    if(x<this->rect.xmin())  { c=c+left; }
+    else if(x>this->rect.xmax())  { c=c+right; }
+    if(y<this->rect.ymin())  { c=c+bottom; }
+    else if(y>this->rect.ymax())  { c=c+top; }
     code=c;
 }
 
 int CutLine::CS_CutLine(const Line * line)
 {
-    double x1 = line->getHeadPt().getX(),
+    double  x1 = line->getHeadPt().getX(),
             y1 = line->getHeadPt().getY(),
             x2 = line->getTailPt().getX(),
             y2 = line->getTailPt().getY();
-    int code1,code2,code;
-    int x,y;
+
+    int code1=0,code2=0 ,code=0 ;
+    int x = 0,y = 0;
     encode(x1,y1,code1);
     encode(x2,y2,code2);
     while(code1!=0||code2!=0)//都在里面时，直接画线，否则进行判断
     {
-        if((code1&code2)!=0)  return 0;//都在外面舍弃
+        if((code1&code2)!=0)return 0;//都在外面舍弃
         code=code1;
-        if(code1==0)  code=code2;
+        if(code1==0)
+            code = code2;
         if((left&code)!=0)
         {x=this->rect.xmin();y=y1+(y2-y1)*(this->rect.xmin()-x1)/(x2-x1);}
         else if((right&code)!=0)
         {x=this->rect.xmax();y=y1+(y2-y1)*(this->rect.xmax()-x1)/(x2-x1);}
         else if ((bottom&code) != 0)
-        {y=this->rect.ymax();x=x1+(x2-x1)*(this->rect.ymax()-y1)/(y2-y1);}
-        else if ((top&code) != 0)
         {y=this->rect.ymin();x=x1+(x2-x1)*(this->rect.ymin()-y1)/(y2-y1);}
-        if(code==code1)
-        {x1=x;y1=y;encode(x,y,code1);}
+        else if ((top&code) != 0)
+        {y=this->rect.ymax();x=x1+(x2-x1)*(this->rect.ymax()-y1)/(y2-y1);}
+        if(code == code1)
+        {x1=x;y1=y; encode(x,y,code1);}
         else
-        {x2=x;y2=y;encode(x,y,code2);}
+        {x2=x;y2=y; encode(x,y,code2);}
     }
     PixShape::Line(x1,y1,x2,y2,line->getColor());
     return 0;
