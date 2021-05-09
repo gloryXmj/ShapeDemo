@@ -17,6 +17,7 @@ DEPENDPATH+= $$PWD/ \
              $$PWD/Algorithm/
 
 SOURCES += \
+        Algorithm/cutpolygon.cpp \
         Color.cpp \
         Figure/Line.cpp \
         Figure/Point.cpp \
@@ -35,6 +36,7 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 HEADERS += \
+    Algorithm/cutpolygon.h \
     Color.h \
     Figure/Line.h \
     Figure/Point.h \

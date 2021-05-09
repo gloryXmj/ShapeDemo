@@ -8,7 +8,7 @@ class Edge
 {
 public:
     Edge();
-    Edge(int a_x, int a_y, int b_x, int b_y);
+    Edge(const int a_x, const int a_y, const int b_x, const int b_y);
     Edge(const Point &p_a, const Point &p_b);
     Edge(const Edge &edge);
     ~Edge();
@@ -24,11 +24,11 @@ public:
      */
     Point* getEnd();
 
-    void set(int a_x, int a_y, int b_x, int b_y);
-    void setStart(int a_x,int a_y);
-    void setEnd(int b_x, int b_y);
+    void set(const int a_x,const int a_y,const int b_x,const int b_y);
+    void setStart(const int a_x,const int a_y);
+    void setEnd(const int b_x,const int b_y);
 
-    void print();
+    void print() const;
 
 private:
     // 这两个点的顺序与画多边形时的顺序一个该是相同的

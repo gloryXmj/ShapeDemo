@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE QtCreatorProject>
+<<<<<<< HEAD
 <!-- Written by QtCreator 4.14.0, 2021-05-08T00:30:18. -->
+=======
+<!-- Written by QtCreator 4.14.2, 2021-05-08T16:00:53. -->
+>>>>>>> 6ebfc97514d2f4397aae4c5076ba2f9ec6f2dcc6
 <qtcreator>
  <data>
   <variable>EnvironmentId</variable>
@@ -301,7 +305,12 @@
     <value type="bool" key="RunConfiguration.UseLibrarySearchPath">true</value>
     <value type="bool" key="RunConfiguration.UseQmlDebugger">false</value>
     <value type="bool" key="RunConfiguration.UseQmlDebuggerAuto">true</value>
+<<<<<<< HEAD
     <value type="QString" key="RunConfiguration.WorkingDirectory.default">D:/xmjWorks/Qt/ShapeTestDemo/build-ShapeDemo-Desktop_Qt_5_12_9_MSVC2017_32bit-Debug</value>
+=======
+    <value type="bool" key="RunConfiguration.UseTerminal">true</value>
+    <value type="QString" key="RunConfiguration.WorkingDirectory.default">D:/workspace/TestStudio/build-ShapeDemo-Desktop_Qt_5_11_1_MSVC2015_32bit-Debug</value>
+>>>>>>> 6ebfc97514d2f4397aae4c5076ba2f9ec6f2dcc6
    </valuemap>
    <value type="int" key="ProjectExplorer.Target.RunConfigurationCount">1</value>
   </valuemap>

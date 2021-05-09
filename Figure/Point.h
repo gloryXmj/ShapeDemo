@@ -21,6 +21,10 @@ public:
 
     // 重载运算符
     Point &operator =(const Point& point);      // 重载等于号
+    Point &operator -(const Point& point);      // 重载减号
+    Point &operator +(const Point& point);      // 重载加号
+    bool operator ==(const Point& point);      // 重载等于等于号
+
 
 private:
     double x;   // 点的X坐标

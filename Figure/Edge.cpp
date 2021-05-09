@@ -20,7 +20,7 @@ Edge::Edge()
  * @param  int b_y
  * @date   2021/04/27
  */
-Edge::Edge(int a_x, int a_y, int b_x, int b_y)
+Edge::Edge(const int a_x,const int a_y,const int b_x, const int b_y)
 {
     this->p_start.set(a_x, a_y);
     this->P_end.set(b_x, b_y);
@@ -83,7 +83,7 @@ Point *Edge::getEnd()
  * @return 返回值
  * @date   2017/xx/xx
  */
-void Edge::set(int a_x, int a_y, int b_x, int b_y)
+void Edge::set(const int a_x, const int a_y, const int b_x,const  int b_y)
 {
     this->setStart(a_x, a_y);
     this->setEnd(b_x, b_y);
@@ -97,7 +97,7 @@ void Edge::set(int a_x, int a_y, int b_x, int b_y)
  * @return void
  * @date   2021/04/27
  */
-void Edge::setStart(int a_x, int a_y)
+void Edge::setStart(const int a_x,const int a_y)
 {
     this->p_start.set(a_x, a_y);
 }
@@ -110,7 +110,7 @@ void Edge::setStart(int a_x, int a_y)
  * @return void
  * @date   2021/04/27
  */
-void Edge::setEnd(int b_x, int b_y)
+void Edge::setEnd(const int b_x,const int b_y)
 {
     this->P_end.set(b_x, b_y);
 }
@@ -121,7 +121,7 @@ void Edge::setEnd(int b_x, int b_y)
  * @return void
  * @date   2021/04/27
  */
-void Edge::print()
+void Edge::print() const
 {
     this->p_start.print();
     std::cout <<"->";

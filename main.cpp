@@ -10,7 +10,7 @@
 #include "pixshape.h"
 #include "FillControl.h"
 #include "cutline.h"
-
+#include "cutpolygon.h"
 int main(int argc, char *argv[])
 {
     QCoreApplication a(argc, argv);
@@ -78,14 +78,55 @@ int main(int argc, char *argv[])
         //        fillControl.paint(1);
         //        fillControl.scanLine();
 
-        Cohen_Suther_land::CutLine cut;
-        cut.setRect(Mcoder::Rect(120,320,150,240));
-        Mcoder::Line line(100,100,1000,2000);
-        line.setColor(Color(255,0,0));
-        cut.addLine(&line);
-        cut.exeCutLine();
-        //https://blog.csdn.net/chengxuyuanliwanwan/article/details/96866762
-        std::cout << "本次绘制用时 : " << clock()- timeBegin << " ms"<<std::endl;
+
+        //        CutLine *cut =  new  Liang_Barsky::Liang_Barsky_CutLine();
+        //        CutLine *cut = new Cohen_Suther_land::Cohen_Suther_CutLine();
+        //        cut->setRect(Mcoder::Rect(320,120,240,150));
+        //        Mcoder::Line line(100,100,2000,2000);
+        //        line.setColor(Color(0,255,0));
+        //        cut->addLine(&line);
+        //        std::cout<< cut->exeCutLine()<<std::endl;
+        ///https://blog.csdn.net/chengxuyuanliwanwan/article/details/96866762
+
+        std::vector<Mcoder::Point*> polygonPts;
+        ///凹多边形
+        polygonPts.push_back(new Mcoder::Point(700,100));
+        polygonPts.push_back(new Mcoder::Point(1100,900));
+        polygonPts.push_back(new Mcoder::Point(700,500));
+        polygonPts.push_back(new Mcoder::Point(300,900));
+        polygonPts.push_back(new Mcoder::Point(700,100));
+
+        //        Mcoder::Polygon polygon(polygonPts);
+        //        polygon.setColor(Color(rand()%255,rand()%255,rand()%255));
+        //        PixShape::Polygon(polygonPts,Color(rand()%255,rand()%255,rand()%255),true);
+
+        std::vector<Mcoder::Point*> clipPts;
+        ///裁剪区域在上面的 裁剪后还是一个整体的
+        //        clipPts.push_back(new Mcoder::Point(400,0));
+        //        clipPts.push_back(new Mcoder::Point(800,0));
+        //        clipPts.push_back(new Mcoder::Point(800,600));
+        //        clipPts.push_back(new Mcoder::Point(400,600));
+        ///裁剪区域在下面  裁剪后变成两个独立的模块
+        clipPts.push_back(new Mcoder::Point(200,550));
+        clipPts.push_back(new Mcoder::Point(1200,550));
+        clipPts.push_back(new Mcoder::Point(1200,1000));
+        clipPts.push_back(new Mcoder::Point(200,1000));
+
+
+        //        clipPts.push_back(new Mcoder::Point(400,0));
+        //        PixShape::Polygon(clipPts,Color(rand()%255,rand()%255,rand()%255),true);
+
+        CutPolygon cutploy;
+        cutploy.setClipPts(clipPts);
+        cutploy.setPolygon(polygonPts);
+        std::vector<Mcoder::Point> outPts;
+        cutploy.clipFunc(outPts);
+        std::cout << outPts.size()<<std::endl;
+        std::vector<Mcoder::Point*> pOutPts;
+        for(int i =0 ;i < (int)outPts.size();i++)
+            pOutPts.push_back(new Mcoder::Point(outPts.at(i)));
+        PixShape::Polygon(pOutPts,Color(rand()%255,rand()%255,rand()%255),true);
+        std::cout << "本次绘制用时 : " << clock()- timeBegin << "ms"<<std::endl;
         Sleep(100);
     }
     // 恢复原来的画笔和画刷
